@@ -40,6 +40,36 @@ If the app is closed anyway (for example with Zoom's own **Leave** button), a fu
 Settings and the PIN hash are stored in `%AppData%\FocusLock`. All changes to Windows are undone
 when the lock ends. If FocusLock crashes or the PC loses power, they are undone the next time it starts.
 
+## Forgot the PIN?
+
+There is no recovery code, but you can always get back in.
+
+**No lock is running:**
+
+1. Close FocusLock (if it stays open, it can save the old PIN again).
+2. Delete `%AppData%\FocusLock\settings.json`. Paste `%AppData%\FocusLock` into File Explorer's
+   address bar to get there.
+3. Start FocusLock and set a new PIN. Your app, minutes and other choices are reset too.
+
+**A lock is running:**
+
+- If it has a timer and *When the time is up* is set to unlock or lock Windows, wait for it to end.
+- Otherwise, restart the PC with the power button, or press Ctrl+Alt+Del and use the power icon in
+  the bottom-right corner. The lock does not come back after a restart.
+- After the restart, **open FocusLock once**. It switches Task Manager and the Lock and Sign out
+  options back on, which stay off until you do. Then reset the PIN as above.
+
+Do not delete the whole `%AppData%\FocusLock` folder after a forced restart: its `restore.json`
+file records which Windows settings to put back. If it is already gone, delete these values with
+Registry Editor to get Task Manager and the Lock and Sign out options back:
+
+- `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\System`:
+  `DisableTaskMgr`, `DisableLockWorkstation`, `DisableChangePassword`
+- `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`: `NoLogoff`
+
+Wrong PINs never lock you out for good: after every three wrong tries the prompt makes you wait,
+starting at 30 seconds and growing each time.
+
 ## Limits
 
 FocusLock runs as the normal Windows user and needs no admin rights. This keeps it simple, but it
